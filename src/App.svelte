@@ -1,10 +1,20 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { writable } from "svelte/store";
 
   let searchInput: HTMLInputElement;
   let searchInputValue = "";
 
+  const word = writable("");
   onMount(async () => {
+    chrome.storage.session.onChanged.addListener(async (changes) => {
+      const lastWordChange = changes["word"];
+      if (!lastWordChange) {
+        return;
+      }
+      word.set(lastWordChange.newValue);
+    });
+
     searchInput.focus();
   });
 </script>
@@ -18,6 +28,9 @@
     class="search-input"
   />
   <button>Click me</button>
+  <div>
+    <p id="definition">Hovered word: {$word}</p>
+  </div>
 </div>
 
 <style>
