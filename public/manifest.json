@@ -24,8 +24,18 @@
         "default": "Ctrl+Period",
         "mac": "Command+Period"
       }
-    }
+    },
+      "Open-side-panel": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Y",
+          "mac": "Command+Shift+Y"
+        },
+        "description": "Open side panel"
+      }
   },
   "host_permissions": ["https://*/*"],
-  "permissions": ["tabs", "scripting", "storage"]
+  "permissions": ["tabs", "scripting", "storage", "sidePanel", "contextMenus"],
+  "side_panel": {
+    "default_path": "index.html"
+  }
 }
