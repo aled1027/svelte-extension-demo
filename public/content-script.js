@@ -30,31 +30,36 @@ let clientX = 0;
 let clientY = 0;
 
 function getMouseOverText(event) {
-  const element = document.elementFromPoint(clientX, clientY);
+  // Helper function to get all textNodes related to a node
+  function getTextNode(node) {
+    let textNodes = [];
 
-  if (element) {
-    const range = document.createRange();
-    let textNode = null;
-
-    // Recursively search for a text node
-    function getTextNode(node) {
+    function findTextNodes(node) {
       if (node.nodeType === Node.TEXT_NODE) {
-        return node;
+        textNodes.push(node);
+      } else {
+        for (const child of node.childNodes) {
+          findTextNodes(child);
+        }
       }
-      for (const child of node.childNodes) {
-        const found = getTextNode(child);
-        if (found) return found;
-      }
-      return null;
     }
 
-    textNode = getTextNode(element);
+    findTextNodes(node);
+    return textNodes;
+  }
 
-    if (textNode) {
-      let offset = 0;
+  const element = document.elementFromPoint(clientX, clientY);
+  if (element) {
+    const range = document.createRange();
+    const textNodes = getTextNode(element);
+
+    if (!textNodes) {
+      return null;
+    }
+    let offset = 0;
+    let theTextNode = null;
+    for (const textNode of textNodes) {
       range.selectNodeContents(textNode);
-      const rects = range.getClientRects();
-
       for (let i = 0; i < textNode.length; i++) {
         range.setStart(textNode, i);
         range.setEnd(textNode, i + 1);
@@ -67,23 +72,22 @@ function getMouseOverText(event) {
           clientY <= rect.bottom
         ) {
           offset = i;
+          theTextNode = textNode;
           break;
         }
       }
-
-      const text = textNode.textContent;
-      const before = text.slice(0, offset);
-      const after = text.slice(offset);
-
-      const start = before.lastIndexOf(" ") + 1;
-      const end =
-        after.indexOf(" ") === -1 ? text.length : offset + after.indexOf(" ");
-
-      const word = text.slice(start, end);
-      return { word, element };
     }
+    const text = theTextNode.textContent;
+    const before = text.slice(0, offset);
+    const after = text.slice(offset);
+
+    const start = before.lastIndexOf(" ") + 1;
+    const end =
+      after.indexOf(" ") === -1 ? text.length : offset + after.indexOf(" ");
+
+    const word = text.slice(start, end);
+    return { word, element };
   }
-  return null;
 }
 
 function getTextSelection() {
@@ -127,10 +131,9 @@ async function checkForWord(event) {
     return;
   }
   lastMessageSentTime = curTimeInMS;
-  console.log("Over word:", word);
 
   // Send the information about the hovered word to the service worker
-  chrome.runtime.sendMessage({
+  await chrome.runtime.sendMessage({
     action: "wordHover",
     word: word,
     context: context,
