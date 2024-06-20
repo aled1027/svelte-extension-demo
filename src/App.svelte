@@ -14,13 +14,17 @@
       }
       word.set(lastWordChange.newValue);
     });
-
     searchInput.focus();
   });
 </script>
 
+<svelte:head>
+  <script type="text/javascript" src="oauth.js"></script>
+</svelte:head>
+
 <div class="popup">
   <h1>Svelte Extension Demo</h1>
+  <button id="login">Log in</button>
   <input
     bind:this={searchInput}
     bind:value={searchInputValue}
@@ -35,8 +39,8 @@
 
 <style>
   .popup {
-    /* width: 640px; */
-    /* height: 480px; */
+    width: 640px;
+    height: 480px;
     display: flex;
     flex-direction: column;
     gap: 1rem;

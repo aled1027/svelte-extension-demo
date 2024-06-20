@@ -34,8 +34,16 @@
       }
   },
   "host_permissions": ["https://*/*"],
-  "permissions": ["tabs", "scripting", "storage", "sidePanel", "contextMenus"],
+  "permissions": ["tabs", "scripting", "storage", "sidePanel", "contextMenus", "identity"],
   "side_panel": {
     "default_path": "index.html"
-  }
+  },
+  "oauth2": {
+    "client_id": "549414808892-msefjb1s21sj37jpmmjgg8if0rbjn831.apps.googleusercontent.com",
+    "scopes": [
+      "openid", "email", "profile"
+    ]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzz69Gl08jxgu8KnLPbrKLoCmXw/cBNZFqCaZ3V1XpsFxSdlyxxHxlKU61BHMPwGNw+hP8QomFCN8lMKPL1ifJo7Z7idUP4rOkYTbGFk/nsukvp5OMt3TX96s3CbGiu26GR2+zKnxwYN0KToEM7JeWfQIm0brgt5LfUWRaVELe2QRRLYwe8r86VvetGisppXtDSAeXYpo1S1pwPoFb/8xUwp3SkWP2TiCIhyBz7ymlLdyhrs740vh61z86VGrLKat4vtMeUNm/FOCDVQs0I/biyaIJVx7EIpA163hTSx7jgDKUDPs5X3+0Ww73BpzQPdskpIjcYcu8umwIAjE1Dl11QIDAQAB"
 }
+
